@@ -567,14 +567,13 @@
                  * @param {Number} errorThrown
                  * @return {void}
                  */
-                const rejected = ({ request, textStatus, errorThrown }) => {
-
+                const rejected = ({ request, textStatus, errorThrown, statusText }) => {
                     if (get(this, 'abortedUpload') !== true) {
-                        set(this, 'uploadStatus.error', { request, textStatus, errorThrown });
+                        set(this, 'uploadStatus.error',
+                            { request, textStatus || statusText, errorThrown });
                     }
 
-                    this.invokeHook('rejected', request, textStatus, errorThrown);
-
+                    this.invokeHook('rejected', request, textStatus || statusText, errorThrown);
                 };
 
                 /**
