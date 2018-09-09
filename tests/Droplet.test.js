@@ -315,6 +315,7 @@ describe('Ember Droplet', () => {
         component.send('uploadFiles');
 
         const formData = component.getFormData();
+        
         expect(formData.get('name')).toEqual('Adam');
         expect(formData.get('location')).toEqual('London');
         expect(formData.get('file')).not.toBeUndefined();

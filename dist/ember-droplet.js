@@ -1,7 +1,5 @@
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 (function main($window, $Ember, $FileReader) {
@@ -630,8 +628,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         var rejected = function rejected(_ref) {
           var request = _ref.request,
               textStatus = _ref.textStatus,
-              errorThrown = _ref.errorThrown;
+              errorThrown = _ref.errorThrown,
+              responseText = _ref.responseText,
+              responseJSON = _ref.responseJSON;
 
+          textStatus = textStatus || responseText;
+          request = request || responseJSON;
 
           if (get(_this6, 'abortedUpload') !== true) {
             set(_this6, 'uploadStatus.error', { request: request, textStatus: textStatus, errorThrown: errorThrown });
@@ -702,19 +704,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           var willExceedQuota = _this7.get('validFiles.length') === _this7.get('options.maximumValidFiles');
 
           if (model instanceof $Ember.Object) {
-            var _ret = function () {
 
-              var statusType = _this7.isValid(model) && !willExceedQuota ? STATUS_TYPES.VALID : STATUS_TYPES.INVALID;
-              run(function () {
-                return model.setStatusType(statusType);
-              });
-              get(_this7, 'files').pushObject(model);
-              return {
-                v: model
-              };
-            }();
-
-            if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+            var statusType = _this7.isValid(model) && !willExceedQuota ? STATUS_TYPES.VALID : STATUS_TYPES.INVALID;
+            run(function () {
+              return model.setStatusType(statusType);
+            });
+            get(_this7, 'files').pushObject(model);
+            return model;
           }
         }).filter(function (model) {
           return typeof model !== 'undefined';
